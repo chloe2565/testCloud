@@ -22,6 +22,7 @@ body.admin {
 .sidebar {
     position: fixed;
     height: -webkit-fill-available;
+    height: 100%;
     width: 15%;
     background: #11101D;
     padding: 10px 6px;
