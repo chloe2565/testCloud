@@ -426,10 +426,24 @@ function checklogin()
 // Database Setups and Functions
 // ============================================================================
 
+$host = 'assm-db.cx08imi8ee14.us-east-1.rds.amazonaws.com'; //RDS endpoint
+$dbname = 'studentrecord'; //DB name
+$username = 'admin'; //RDS username
+$password = 'abcd1234'; //RDS password
+
 // Global PDO object
-$_db = new PDO('mysql:dbname=studentrecord', 'root', '', [
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-]);
+try {
+    $_db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, [
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Optional: makes errors easier to debug
+    ]);
+} catch (PDOException $e) {
+    die("Database connection failed: " . $e->getMessage());
+}
+
+//$_db = new PDO('mysql:dbname=studentrecord', 'root', '', [
+//    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
+//]);
 
 // Is unique?
 function is_unique($value, $table, $field)
