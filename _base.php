@@ -435,7 +435,7 @@ $password = 'abcd1234'; //RDS password
 try {
     $_db = new PDO("mysql:host=$host;dbname=$dbname", $username, $password, [
         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_OBJ,
-        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,  // Optional: makes errors easier to debug
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     ]);
 } catch (PDOException $e) {
     die("Database connection failed: " . $e->getMessage());
