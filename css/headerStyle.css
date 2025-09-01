@@ -1,0 +1,283 @@
+*{
+    box-sizing: border-box;
+}
+
+header{
+    width: 100%;
+    top: 0;
+    z-index: 9;
+    position: sticky;
+}
+
+.headerContainer{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.upperMenu{
+    background-color: #472e58;
+}
+
+.lowerMenu{
+    background-color: #ffffff;
+    box-shadow: 0px 0px 10px #472e58;
+}
+
+.upperMenu, .lowerMenu{
+    display: flex;
+    width: 100%;
+    height: auto;
+    justify-content: space-between;
+}
+
+.upperMenu > *, .lowerMenu > *{
+    margin: 10px;
+    display: flex;
+}
+
+.lowerMenu-container > *{
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.iconLinkBtn{
+    display: block;
+    align-items: center;
+    justify-content: center;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    margin: 0px;
+    left: 100px;
+    width:100%;
+    height: 100%;
+    background: transparent;
+}
+
+.iconLinkBtn > a, .iconLinkBtn > a {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.serchBarWrapper{
+    height: fit-content;
+    margin-top: auto;
+    margin-bottom: auto;
+}
+
+.searchBar{
+    width: 70%;
+}
+
+.serchBarWrapper > div{
+    width: 80%;
+    background-color: white;
+    height: 35px;
+    padding: 5px;
+    justify-content: space-between;
+    overflow: hidden;
+    border-bottom: solid 1px white;
+    border-radius: 30px;
+}
+
+input.searchBar{
+    width: 85%;
+    margin: 0;
+    height: inherit;
+    border: none;
+    padding-left: 10px;
+    background-color: transparent;
+    font-size: 16px;
+    color: grey;
+}
+
+input.searchBar:focus{
+    border: 0px;
+    outline: 0px;
+    outline-offset: 0px;
+    border-color: transparent;
+}
+
+input.searchBar + button{
+    background: transparent;
+    height: inherit;
+    border: none;
+    width: auto;
+}
+
+input.searchBar + button > svg{
+    stroke: grey;
+}
+
+input.searchBar:focus, input.searchBar:focus + button > svg{
+    stroke: #472e58;
+    color: #472e58;
+}
+
+.menuBtn{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 20px;
+}
+
+.menuBtn svg{
+    pointer-events: none;
+}
+
+.menuBtn button:hover svg{
+    stroke: #c7a8dc;
+    transition: 0.5s;
+}
+
+.dropdown{
+    position: relative;
+    display: inline-block;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+  }
+  
+  .dropdown-content a:hover {background-color: #ddd;}
+  
+  .dropdown:hover .dropdown-content {display: block;}
+  
+  .dropdown:hover .dropbtn {background-color: #c7a8dc;}
+
+  .iconLinkBtn + .dropdown-content{
+    right: 0;
+  }
+
+/* lower part menu */
+.menu-box{
+    width: 90%;
+    height: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    gap: 20px;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu-box span{
+    color: #472e58;
+}
+
+.menu-box > div{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100px;
+}
+
+.menu-box > div > a{
+    text-decoration: none;
+    color: #472e58;
+}
+
+.menu-box > div > a:hover{
+    color: #c7a8dc;
+    transition-duration: 0.5s;
+}
+
+/* Footer */
+body footer {
+    background-color: #472e58;
+    color: white;
+    padding: 20px;
+    margin-left: -20px;
+    height: 290px;
+    margin: 0px;
+}
+footer::before{
+    clear: both;
+    content: "";
+    display: table;
+}
+
+footer::after{
+    clear: both;
+    content: "";
+    display: table;
+}
+
+
+footer .table-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center; 
+    font-size: 15px;
+}
+
+footer table{
+    color: white;
+}
+
+footer div#map{
+    width: 40%;
+}
+
+footer div#map > iframe{
+    width: 100%;
+}
+
+footer div#map::after{
+    clear: both;
+    content: "";
+    display: table;
+}
+footer td {
+    padding: 5px;
+    margin: 10px;
+}
+footer .contact {
+    color: white;
+    text-decoration: none;
+}
+footer .contact:hover {
+    color: #c7a8dc;
+}
+footer td#contactpic a{
+    padding: 10px;
+    margin: 0px;
+}
+footer div.table-container::after{
+    clear: both;
+    content: "";
+    display: table;
+}
+
+
+input[type="submit"], input[type="button"]{
+    background: linear-gradient(#815c9a, #2c1a38);
+    border: none;
+    margin: 0 auto;
+    margin-top: 15px;
+    padding: 8px 20px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 3px;
+    cursor: pointer;
+    line-height: 20px;
+    font-family: inherit;
+    letter-spacing: .05em;
+    color: #ffffff;
+}

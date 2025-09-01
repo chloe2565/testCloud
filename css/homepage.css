@@ -1,0 +1,65 @@
+body {
+    position: relative;
+    background-color: #f0f0f069;
+}
+
+.hp-product-list {
+    width: 90%;
+    margin: auto;
+    position: relative;
+}
+
+.product-container {
+    position: relative;
+    overflow: hidden;
+    flex-wrap: nowrap;
+}
+
+.product-content {
+    margin: auto;
+}
+
+.slide-row {
+    min-width: 100%;
+    max-width: 100%;
+    display: flex;
+}
+
+.product-container .slider-button {
+    position: absolute;
+    background: transparent;
+    color: #cacaca;
+    top: 50%;
+    transition: 0.4s ease-in;
+    padding: 1rem;
+    border: 0;
+    border-radius: 0;
+    font-size: 20px;
+}
+
+#product-slide-box {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 95%;
+    height: 100%;
+    margin: 10px auto;
+    overflow: hidden;
+}
+
+.product-box{
+    margin: 10px 0px;
+    max-width: 25%;
+    flex-basis: 25%;
+}
+
+.slider-button:hover{
+    background-color: rgba(10, 10, 10, 0.5);
+}
+
+#orbit-previous{
+    left: 0;
+}
+
+#orbit-next{
+    right: 0;
+}
