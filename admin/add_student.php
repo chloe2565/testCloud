@@ -3,6 +3,26 @@ $_title = "Add Student";
 require_once '../_base.php';
 checkSuperadmin();
 
+// Include the AWS SDK for PHP
+require 'vendor/autoload.php';
+use Aws\S3\S3Client;
+use Aws\S3\Exception\S3Exception;
+
+// AWS S3 configuration
+$bucket = 'assm-image-bucket'; // Your actual bucket name
+$region = 'us-east-1'; // Your S3 region
+
+// Connect to S3 (using IAM Role - RECOMMENDED)
+$s3 = new S3Client([
+    'version' => 'latest',
+    'region'  => $region,
+    // If using an IAM role on EC2, remove 'credentials'
+    // 'credentials' => [
+    //     'key'    => 'YOUR_ACCESS_KEY', // Only if not using IAM role
+    //     'secret' => 'YOUR_SECRET_KEY', // Only if not using IAM role
+    // ],
+]);
+
 include 'admin_header.php';
 if (isset($_POST['cancel'])) {
     echo "<script>window.location.href = 'display_staff.php';</script>";
@@ -12,7 +32,6 @@ $_err = [];
 
 
 if (is_post()) {
-    // get data filled in the form
     $sname = post("sname") ?? "";
     $semail = post("semail") ?? "";
     $sphone = post("sphone") ?? "";
@@ -20,7 +39,6 @@ if (is_post()) {
     $scity = post("scity") ?? "";
     $sstate = post("sstate") ?? "";
 
-    // validate data
     $_err["sname"] = checkUsername($sname) ?? '';
     $_err["semail"] = checkRegisterEmail($semail) ?? '';
     $_err["sphone"] = checkRegisterContact($sphone) ?? '';
@@ -28,38 +46,69 @@ if (is_post()) {
     $_err["scity"] = checkCity($scity) ?? '';
     $_err["sstate"] = checkState($sstate) ?? '';
 
+    $newFileName = null;
+
     // file upload
-    if (isset($_FILES['spic'])) {
+    $s3ObjectURL = null; // Variable to store S3 URL
+
+    if (isset($_FILES['spic']) && $_FILES['spic']['error'] === UPLOAD_ERR_OK) {
         $file = $_FILES['spic'];
         $_err["spic"] = checkUploadPic($file);
 
-        // no error
         if (empty($_err["spic"])) {
-            // everything okay, save the file
-            // create a unique id and use it as file name
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            $newFileName = isset($_FILES["spic"]) && !empty($_FILES["spic"] && !empty($ext)) ? uniqid() . '.' . $ext : null;
-        } else {
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $newFileName = uniqid() . '.' . $ext;
+
+    $fileStream = @fopen($file['tmp_name'], 'rb');
+    if (!$fileStream) {
+        $_err["spic"] = "Failed to open uploaded file.";
+    } else {
+        try {
+            $result = $s3->putObject([
+                'Bucket' => $bucket,
+                'Key'    => 'user-images/' . $newFileName,
+                'Body'   => $fileStream,
+                'ACL'    => 'public-read',
+            ]);
+            $s3ObjectURL = $result['ObjectURL'];
+        } catch (S3Exception $e) {
+            $_err["spic"] = "S3 Upload failed: " . $e->getMessage();
             $newFileName = null;
         }
     }
+}
+
+error_log("Upload file size: " . filesize($file['tmp_name']));
+error_log("Upload file path: " . $file['tmp_name']);
+error_log("Upload error: " . $file['error']);
+
+
+    } else if (isset($_FILES['spic']) && $_FILES['spic']['error'] !== UPLOAD_ERR_NO_FILE) {
+         // Handle other upload errors
+        $_err["spic"] = "File upload error: " . $_FILES['spic']['error'];
+        $newFileName = null;
+    } else {
+         $newFileName = null; // No file uploaded
+    }
+
 
     $_err = array_filter($_err);
 
     // no error then store new student record
     if (empty($_err)) {
         $stmt = $_db->prepare("INSERT INTO student (studName, studPic, studEmail, studPhone, studAddress, studCity, studState) VALUES (?, ?, ?, ?, ?, ?, ?)");
+        // Store the S3 object key or URL in the database
         $stmt->execute([$sname, $newFileName, $semail, $sphone, $saddress, $scity, $sstate]);
 
         if ($stmt->rowCount() > 0) {
             // success
-            // save the profile image file
-            if ($newFileName !== null) {
-                move_uploaded_file($file['tmp_name'], '../profilePic/' . $newFileName);
-            }
-            
-           sweet_alert_msg('New student record added successfully!', 'success', 'student_list.php', false);
-            exit(); 
+            // Remove the local file move, as it's now on S3
+            // if ($newFileName !== null) {
+            //     move_uploaded_file($file['tmp_name'], '../profilePic/' . $newFileName);
+            // }
+
+            sweet_alert_msg('New student record added successfully!', 'success', 'student_list.php', false);
+            exit();
         } else {
             // fail
             $_err[] = "Unable to insert. Please try again.";
