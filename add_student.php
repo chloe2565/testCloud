@@ -32,7 +32,21 @@ $_err = [];
 
 
 if (is_post()) {
-    // ... (your existing data collection and validation) ...
+    $sname = post("sname") ?? "";
+    $semail = post("semail") ?? "";
+    $sphone = post("sphone") ?? "";
+    $saddress = post("saddress") ?? "";
+    $scity = post("scity") ?? "";
+    $sstate = post("sstate") ?? "";
+
+    $_err["sname"] = checkUsername($sname) ?? '';
+    $_err["semail"] = checkRegisterEmail($semail) ?? '';
+    $_err["sphone"] = checkRegisterContact($sphone) ?? '';
+    $_err["saddress"] = checkAddress($saddress) ?? '';
+    $_err["scity"] = checkCity($scity) ?? '';
+    $_err["sstate"] = checkState($sstate) ?? '';
+
+    $newFileName = null;
 
     // file upload
     $s3ObjectURL = null; // Variable to store S3 URL
@@ -42,24 +56,33 @@ if (is_post()) {
         $_err["spic"] = checkUploadPic($file);
 
         if (empty($_err["spic"])) {
-            $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
-            $newFileName = uniqid() . '.' . $ext; // This is the name for S3 and DB
+    $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
+    $newFileName = uniqid() . '.' . $ext;
 
-            try {
-                $result = $s3->putObject([
-                    'Bucket' => $bucket,
-                    'Key'    => 'user-images/' . $newFileName, // Store under user-images/
-                    'Body'   => fopen($file['tmp_name'], 'rb'),
-                    'ACL'    => 'public-read', // Makes the object publicly accessible via its URL
-                ]);
-                $s3ObjectURL = $result['ObjectURL']; // Get the URL from S3
-            } catch (S3Exception $e) {
-                $_err["spic"] = "S3 Upload failed: " . $e->getMessage();
-                $newFileName = null; // Don't save to DB if S3 failed
-            }
-        } else {
+    $fileStream = @fopen($file['tmp_name'], 'rb');
+    if (!$fileStream) {
+        $_err["spic"] = "Failed to open uploaded file.";
+    } else {
+        try {
+            $result = $s3->putObject([
+                'Bucket' => $bucket,
+                'Key'    => 'user-images/' . $newFileName,
+                'Body'   => $fileStream,
+                'ACL'    => 'public-read',
+            ]);
+            $s3ObjectURL = $result['ObjectURL'];
+        } catch (S3Exception $e) {
+            $_err["spic"] = "S3 Upload failed: " . $e->getMessage();
             $newFileName = null;
         }
+    }
+}
+
+error_log("Upload file size: " . filesize($file['tmp_name']));
+error_log("Upload file path: " . $file['tmp_name']);
+error_log("Upload error: " . $file['error']);
+
+
     } else if (isset($_FILES['spic']) && $_FILES['spic']['error'] !== UPLOAD_ERR_NO_FILE) {
          // Handle other upload errors
         $_err["spic"] = "File upload error: " . $_FILES['spic']['error'];
