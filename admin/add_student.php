@@ -10,6 +10,21 @@ if (isset($_POST['cancel'])) {
 
 $_err = [];
 
+// AWS SDK Setup
+require 'vendor/autoload.php';
+use Aws\S3\S3Client;
+use Aws\Exception\AwsException;
+use Aws\Credentials\CredentialProvider;
+
+// Initialize S3 client
+$s3Client = new S3Client([
+    'version'     => 'latest',
+    'region'      => 'us-east-1', 
+    'credentials' => CredentialProvider::defaultProvider(), // Use IAM role or your AWS credentials
+]);
+
+// Bucket name in S3
+$bucketName = 'assm-image-bucket';  
 
 if (is_post()) {
     // get data filled in the form
@@ -39,6 +54,26 @@ if (is_post()) {
             // create a unique id and use it as file name
             $ext = strtolower(pathinfo($file['name'], PATHINFO_EXTENSION));
             $newFileName = isset($_FILES["spic"]) && !empty($_FILES["spic"] && !empty($ext)) ? uniqid() . '.' . $ext : null;
+
+            // Upload the image to S3
+            try {
+                // Upload the image file to S3 in 'user-images' folder
+                $result = $s3Client->upload(
+                    $bucketName,  // S3 bucket name
+                    'user-images/' . $newFileName,  // Folder path in the bucket
+                    fopen($file['tmp_name'], 'rb'), // File resource
+                    'public-read'  // Make the file publicly readable
+                );
+
+                // Get the URL of the uploaded file
+                $fileUrl = $result['ObjectURL'];  // This is the public URL
+
+            } catch (AwsException $e) {
+                $_err['spic'] = 'Error uploading file to S3: ' . $e->getMessage();
+                $newFileName = null;
+            }
+
+		
         } else {
             $newFileName = null;
         }
@@ -53,10 +88,6 @@ if (is_post()) {
 
         if ($stmt->rowCount() > 0) {
             // success
-            // save the profile image file
-            if ($newFileName !== null) {
-                move_uploaded_file($file['tmp_name'], '../profilePic/' . $newFileName);
-            }
             
             alert_msg('New student record added successfully!', 'student_list.php');
             exit(); 
