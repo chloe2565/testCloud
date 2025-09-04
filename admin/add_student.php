@@ -60,8 +60,7 @@ if (is_post()) {
                 $result = $s3Client->upload(
                     $bucketName,  // S3 bucket name
                     'user-images/' . $newFileName,  // Folder path in the bucket
-                    fopen($file['tmp_name'], 'rb'), // File resource
-                    'public-read'  // Make the file publicly readable
+                    fopen($file['tmp_name'], 'rb') // File resource
                 );
 
                 // Get the URL of the uploaded file
