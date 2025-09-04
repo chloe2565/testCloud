@@ -11,7 +11,7 @@ if (isset($_POST['cancel'])) {
 $_err = [];
 
 // AWS SDK Setup
-require 'vendor/autoload.php';
+require '../vendor/autoload.php';
 use Aws\S3\S3Client;
 use Aws\Exception\AwsException;
 use Aws\Credentials\CredentialProvider;
@@ -20,7 +20,6 @@ use Aws\Credentials\CredentialProvider;
 $s3Client = new S3Client([
     'version'     => 'latest',
     'region'      => 'us-east-1', 
-    'credentials' => CredentialProvider::defaultProvider(), // Use IAM role or your AWS credentials
 ]);
 
 // Bucket name in S3
