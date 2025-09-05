@@ -19,10 +19,10 @@ if (empty($admin)) {
 <head>
     <meta charset="UTF-8">
     <title><?= $_title ?? "Untitled" ?></title>
-    <link href="../css/utility.css?v=2" rel="stylesheet" type="text/css" />
-    <link href="../css/admin_header.css?v=2" rel="stylesheet" type="text/css" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js?v=2"></script>
-    <script src="../js/app.js?v=2"></script>
+    <link href="../css/utility.css" rel="stylesheet" type="text/css" />
+    <link href="../css/admin_header.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <script src="../js/app.js"></script>
 </head>
 
 <script>

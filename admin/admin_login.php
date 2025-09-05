@@ -27,10 +27,10 @@ if (is_post()) {
 ?>
 
 <head>
-    <link rel="stylesheet" href="../css/admin_login.css?v=2">
-    <link rel="stylesheet" href="../css/login.css?v=2">
-    <link rel="stylesheet" href="../css/utility.css?v=2">
-    <link rel="stylesheet" href="../css/change_pass.css?v=2">
+    <link rel="stylesheet" href="../css/admin_login.css">
+    <link rel="stylesheet" href="../css/login.css">
+    <link rel="stylesheet" href="../css/utility.css">
+    <link rel="stylesheet" href="../css/change_pass.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
     <script src="../js/app.js"></script>
 </head>

@@ -18,7 +18,7 @@ $s3Client = new S3Client([
 ]);
 
 // Bucket name in S3
-$bucketName = 'assm-image-bucket'; 
+$bucketName = 'assm-student-web-bucket'; 
 
 
 // get method -- check if the url have id
@@ -109,7 +109,7 @@ $result = $_db->query("SELECT * FROM student WHERE studid = '$id'");
 $s = $result->fetch();
 
 // Generate the S3 URL for the profile picture to fetch the image
-$profilePicUrl = $s->studPic ? "https://assm-image-bucket.s3.amazonaws.com/user-images/{$s->studPic}" : "../profilePic/profile.png"; 
+$profilePicUrl = $s->studPic ? "https://assm-student-web-bucket.s3.amazonaws.com/user-images/{$s->studPic}" : "../profilePic/profile.png"; 
 
 $sname = $s->studName;
 $semail = $s->studEmail;
