@@ -488,7 +488,8 @@ function alert_msg($msg, $url = null)
 }
 
 // Sweet Alert Message just for some type of message except confirm message
-function sweet_alert_msg($msg, $type = 'success', $url = null, $replace = false) {
+function sweet_alert_msg($msg, $type = 'success', $url = null, $replace = false)
+{    
     echo "<script>
     document.addEventListener('DOMContentLoaded', function() {
         Swal.fire({
