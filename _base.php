@@ -432,7 +432,7 @@ function checklogin()
 // $password = 'abcd1234'; //RDS password
 
 require 'get_secrets.php';
-$creds = getDbCredentials('MyAssmDB'); // name of the secret in AWS Secrets Manager
+$creds = getDbCredentials('MyAssmDBSecret'); // name of the secret in AWS Secrets Manager
 
 $host = $creds['host'];
 $username = $creds['username'];
@@ -760,4 +760,5 @@ function generate_password($length = 8)
 
     return $str;
 }
+
 
